@@ -44,8 +44,9 @@ defmodule LivebookWeb.Output.TableDynamicLive do
   def render(assigns) do
     ~H"""
     <div class="mb-4 flex items-center space-x-3">
-      <h3 class="font-semibold text-gray-800">
-        <%= @name %>
+      <h3 class="flex space-x-2 items-center">
+        <span class="font-semibold text-gray-800"><%= @name %></span>
+        <span class="text-sm"><%= @total_rows %> entries</span>
       </h3>
       <div class="flex-grow"></div>
       <!-- Actions -->
@@ -94,11 +95,16 @@ defmodule LivebookWeb.Output.TableDynamicLive do
                 <th class={"py-3 px-6 text-gray-700 font-semibold #{if(:sorting in @features, do: "cursor-pointer", else: "pointer-events-none")}"}
                   phx-click="column_click"
                   phx-value-column_idx={idx}>
-                  <div class="flex items-center space-x-1">
-                    <span><%= column.label %></span>
-                    <span class={unless(@order_by == column.key, do: "invisible")}>
-                      <.remix_icon icon={order_icon(@order)} class="text-xl align-middle leading-none" />
-                    </span>
+                  <div class="flex flex-col space-y-0.5">
+                    <div class="flex items-center space-x-1">
+                      <span><%= column.label %></span>
+                      <span class={unless(@order_by == column.key, do: "invisible")}>
+                        <.remix_icon icon={order_icon(@order)} class="text-xl align-middle leading-none" />
+                      </span>
+                    </div>
+                    <%= if column[:type] do %>
+                      <div class="text-sm font-normal"><%= column[:type] %></div>
+                    <% end %>
                   </div>
                 </th>
               <% end %>
